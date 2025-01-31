@@ -2,6 +2,9 @@
 
 Este projeto consiste na implantação de um site WordPress utilizando **Docker** em uma instância **EC2** da AWS, com um banco de dados gerenciado pelo **Amazon RDS** (MySQL) e uma rede isolada configurada com **VPC**. Abaixo, você encontrará um guia detalhado de todas as etapas realizadas, incluindo o uso do **Subnet Calculator** para planejamento de redes e a configuração de **Security Groups** para garantir a segurança da infraestrutura.
 
+
+![Arquitetura do Projeto](img/img-arquitetura-project.png)
+
 ---
 
 ## Tecnologias Utilizadas
@@ -31,17 +34,25 @@ A VPC é uma rede privada virtual onde todos os recursos da AWS serão executado
    - Defina o bloco CIDR (ex: `10.0.0.0/16`).
    - Nomeie a VPC (ex: `MinhaVPC`).
 
+![Criacao vpc](img/img-cria-vpc.png)
+
 2. **Criar Sub-redes**:
    - Use o **Subnet Calculator** para planejar as sub-redes.
      - **Link do Subnet Calculator**: [Subnet Calculator](https://www.davidc.net/sites/default/subnets/subnets.html)
      - Essa ferramenta ajuda a dividir o bloco CIDR da VPC em sub-redes menores (ex: `10.0.1.0/24` e `10.0.2.0/24`).
    - Crie duas sub-redes em zonas de disponibilidade diferentes (ex: `us-east-1a` e `us-east-1b`).
 
+![Criacao Subredes](img/img-cria-subnets.png)
+
 3. **Criar um Internet Gateway**:
    - Anexe um Internet Gateway à VPC para permitir acesso à internet.
 
+![Criacao IGW](img/img-cria-igw.png)
+
 4. **Configurar a Tabela de Rotas**:
    - Associe as sub-redes à tabela de rotas e adicione uma rota para o Internet Gateway (`0.0.0.0/0`).
+
+![Criacao tabela de rota](img/img-cria-tabela-rotas-igw.png)
 
 ---
 
@@ -65,7 +76,14 @@ Os **Security Groups** atuam como firewalls virtuais, controlando o tráfego de 
    - Adicione uma regra de entrada para permitir tráfego na porta **3306** (MySQL) apenas do Security Group da instância EC2 (`SG-EC2-WordPress`).
    - Isso garante que apenas a instância EC2 possa se conectar ao banco de dados.
 
+
+3. **Security Group ao EFS**:
+   - O Amazon EFS é um sistema de arquivos escalável que pode ser usado por instâncias EC2.
+   - O Security Group para o EFS vai controlar o tráfego de rede entre o EFS e outras instâncias ou serviços.
 ---
+
+
+![Criacao SG](img/img-securitygroups.png)
 
 ### 3. Criação das Instâncias EC2
 
@@ -160,6 +178,14 @@ O Docker Compose será usado para implantar o WordPress e conectá-lo ao banco d
 3. Faça login no painel administrativo e comece a configurar o site.
 
 ---
+
+![acesso worpress](img/img-initial-worpress.png)
+
+![acesso worpress](img/img-conf-wordpress.png)
+
+![acesso worpress](img/img-bem-vindo-wordpress.png)
+
+![acesso worpress](img/img-blog-foto.png)
 
 ## Conclusão
 
